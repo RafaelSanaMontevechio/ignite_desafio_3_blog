@@ -6,6 +6,8 @@
 
 :root {
   --white: #fff;
+  --pink: #ff57b2;
+  --background: #1a1d23;
 }
 
 @media (max-width: 1080px) {
@@ -21,7 +23,7 @@
 }
 
 body {
-  background: #1a1d23;
+  background: var(--background);
   color: var(--white);
 }
 

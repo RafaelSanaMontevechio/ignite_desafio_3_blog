@@ -4,6 +4,8 @@ import { GetStaticProps } from 'next';
 
 import { getPrismicClient } from '../services/prismic';
 
+import LoadMoreButton from '../components/LoadMoreButton';
+
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
 
@@ -29,7 +31,11 @@ interface HomeProps {
 export default function Home() {
   return (
     <div className={styles.contentContainer}>
-      <p>posts</p>
+      <LoadMoreButton
+        loadMore={() => {
+          console.log('more posts');
+        }}
+      />
     </div>
   );
 }
