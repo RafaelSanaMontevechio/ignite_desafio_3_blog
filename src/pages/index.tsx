@@ -28,13 +28,13 @@ interface Post {
   };
 }
 
-interface PostPagination {
+interface PostsPagination {
   next_page: string;
   results: Post[];
 }
 
 interface HomeProps {
-  postsPagination: PostPagination;
+  postsPagination: PostsPagination;
 }
 
 export default function Home({ postsPagination }: HomeProps) {
@@ -79,7 +79,7 @@ export default function Home({ postsPagination }: HomeProps) {
       <main className={commonStyles.container}>
         {posts.map(post => (
           <div className={styles.posts} key={post.uid}>
-            <Link href={`/posts/${post.uid}`}>
+            <Link href={`/post/${post.uid}`}>
               <a>
                 <strong>{post.data.title}</strong>
                 <p>{post.data.subtitle}</p>
@@ -110,7 +110,7 @@ export default function Home({ postsPagination }: HomeProps) {
   );
 }
 
-export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
+export const getStaticProps: GetStaticProps = async () => {
   const prismic = getPrismicClient();
 
   const postsResponse = await prismic.query(
@@ -121,8 +121,13 @@ export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
     }
   );
 
-  const posts = postsResponse.results.map(post => {
+  const results = postsResponse.results.map(post => {
     return {
+      data: {
+        title: post.data.title,
+        subtitle: post.data.subtitle,
+        author: post.data.author,
+      },
       uid: post.uid,
       first_publication_date: format(
         new Date(post.first_publication_date),
@@ -131,23 +136,17 @@ export const getStaticProps: GetStaticProps = async ({ preview = false }) => {
           locale: ptBR,
         }
       ),
-      data: {
-        title: post.data.title,
-        subtitle: post.data.subtitle,
-        author: post.data.author,
-      },
     };
   });
 
   const postsPagination = {
     next_page: postsResponse.next_page,
-    results: posts,
+    results,
   };
 
   return {
     props: {
       postsPagination,
-      preview,
     },
     revalidate: 1800,
   };

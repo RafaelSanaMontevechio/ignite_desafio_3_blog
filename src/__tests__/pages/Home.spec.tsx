@@ -118,6 +118,7 @@ describe('Home', () => {
     expect(response.props.postsPagination.next_page).toEqual(
       postsPaginationReturn.next_page
     );
+
     expect(response.props.postsPagination.results).toEqual(
       expect.arrayContaining([
         expect.objectContaining(postsPaginationReturn.results[0]),
